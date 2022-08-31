@@ -2,13 +2,13 @@
 config.py
 - settings for the flask application object
 """
-import os
+# import os
+from os import environ
 
 class BaseConfig(object):
     DEBUG = True
     # used for encryption and session management
-    SECRET_KEY = 'mysecretkey'
-    stripe_keys = {
-            'secret_key': os.environ['STRIPE_SECRET_KEY'],
-            'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY']
-    }
+    SECRET_KEY = environ.get('SECRET_KEY'), #os.environ['FLASK_SECRET_KEY']
+    STRIPE_SECRET_KEY = environ.get('STRIPE_SECRET_KEY'),
+    STRIPE_PUBLIC_KEY = environ.get('STRIPE_PUBLIC_KEY')
+    

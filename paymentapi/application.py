@@ -4,16 +4,12 @@ application.py
 """
 
 from flask import Flask
-import stripe
-
 
 def create_app(app_name='PAYMENT_API'):
     app = Flask(app_name)
     app.config.from_object('paymentapi.config.BaseConfig')
 
-    stripe.api_key = stripe_keys['secret_key']
-
-    from paymentapi.api import api
-    app.register_blueprint(api, url_prefix="/api")
+    from paymentapi.api import payment_api
+    app.register_blueprint(payment_api, url_prefix="/api/betterpark-payment")
 
     return app
