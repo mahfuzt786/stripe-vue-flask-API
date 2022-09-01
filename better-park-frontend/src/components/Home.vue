@@ -1,0 +1,35 @@
+<template>
+    <v-container>
+        <v-row class="text-center" style="margin-top:10%;margin-bottom:10%">
+            <v-col cols="8" offset="2" class="">
+                <h1 class="my-2 primary--text">Willkommen bei BetterPark</h1>
+                <p class="my-7 font-weight-regular">
+                    Hier können Sie bequem bis zu 24 Std nach Ihrer Ausfahrt bezahlen
+                    <br>
+                    Suchen Sie einfach nach Ihrem Kfz-Kennzeichen
+                </p>
+            </v-col>
+            <v-col sm="12" md="4" offset-md="4" >
+                <v-text-field class="input-field" placeholder="z. B. SNXY9999"  outlined height="70"></v-text-field>
+                <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px">
+                    suchen
+                </v-btn>
+            </v-col>
+            <v-col cols="12">
+               <Footer />
+            </v-col>
+        </v-row>
+    </v-container>
+</template>
+<script>
+    import Footer from './footer.vue'
+    export default {
+        name: 'HomePage',
+         components: {
+            Footer
+         },
+        data: () => ({
+
+        }),
+    }
+</script>
