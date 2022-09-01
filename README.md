@@ -1,2 +1,9 @@
 # stripe-vue-flask-API
-stripe-vue-flask-API for betterpark
+
+To run the frontend
+
+cd better-park-frontend
+
+npm install //to run for the first time
+
+npm run serve
