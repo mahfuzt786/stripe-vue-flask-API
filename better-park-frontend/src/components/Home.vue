@@ -10,8 +10,8 @@
                 </p>
             </v-col>
             <v-col sm="12" md="4" offset-md="4" >
-                <v-text-field class="input-field" placeholder="z. B. SNXY9999"  outlined height="70"></v-text-field>
-                <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px">
+                <v-text-field class="input-field" id="licencePlate" v-model="licencePlate" placeholder="z. B. SNXY9999"  outlined height="70"></v-text-field>
+                <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px" @click="nextPage()">
                     suchen
                 </v-btn>
             </v-col>
@@ -29,7 +29,21 @@
             Footer
          },
         data: () => ({
-
+            licencePlate: '',
         }),
+        methods: {
+            nextPage() {
+                if(this.licencePlate) {
+                    this.$router.push('/page1')
+                }
+                else {
+                    this.$notify({ 
+                        'text': 'Please enter License Plate Number',
+                        type: 'error',
+                        duration: 10000,
+                     })
+                }
+            }
+        }
     }
 </script>

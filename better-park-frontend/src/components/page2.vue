@@ -10,7 +10,7 @@
             </v-col>
             <v-col sm="12" md="4" offset-md="4">
                 <v-text-field class="input-field" placeholder="z. B. SNXY9999" outlined height="70"></v-text-field>
-                <v-btn class="mt-4" text color="#0068c0">
+                <v-btn class="mt-4" text color="#0068c0" @click="homepage">
                     -> zur Startseite
                 </v-btn>
             </v-col>
@@ -31,6 +31,11 @@
        data: function () {
             return {
                 icon: icon
+            }
+        },
+        methods: {
+            homepage() {
+                this.$router.push('/home')
             }
         }
     }

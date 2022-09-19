@@ -29,6 +29,11 @@
             return {
                 icon: icon
             }
+        },
+        methods: {
+            homepage() {
+                this.$router.push('/home')
+            }
         }
     }
 </script>

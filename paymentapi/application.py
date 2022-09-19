@@ -4,9 +4,11 @@ application.py
 """
 
 from flask import Flask
+from flask_cors import CORS
 
 def create_app(app_name='PAYMENT_API'):
     app = Flask(app_name)
+    CORS(app)
     app.config.from_object('paymentapi.config.BaseConfig')
 
     from paymentapi.api import payment_api

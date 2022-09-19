@@ -9,7 +9,7 @@
                 <v-btn class="white--text " depressed color="#0068c0" block large style="margin-top:-20px">
                     Eingabe bestätigen
                 </v-btn>
-                <v-btn class="mt-6" text color="#0068c0">
+                <v-btn class="mt-6" text color="#0068c0" @click="homepage">
                     -> zurück zur Bezahlung
                 </v-btn>
             </v-col>
@@ -27,5 +27,10 @@
             Footer
          },
         data: () => ({}),
+        methods: {
+            homepage() {
+                this.$router.push('/page3')
+            }
+        }
     }
 </script>

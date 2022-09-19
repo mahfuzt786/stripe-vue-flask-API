@@ -9,6 +9,7 @@
 
     <v-main>
       <router-view></router-view>
+      <notifications position="bottom left"/>
     </v-main>
   </v-app>
 </template>

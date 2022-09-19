@@ -20,13 +20,13 @@
                 </v-card>
             </v-col>
             <v-col sm="12" md="4" offset-md="4" class="text-center my-8">
-                <v-btn class="white--text" depressed color="#0068c0" block large style="margin-top:-20px">
+                <v-btn class="white--text" depressed color="#0068c0" block large style="margin-top:-20px" @click="checkoutpage">
                     Jetzt bezahlen
                 </v-btn>
-                <v-btn class="mt-2" depressed color="#0068c0" block large outlined>
+                <v-btn class="mt-2" depressed color="#0068c0" block large outlined @click="discountpage">
                     Gutscheincode einlösen
                 </v-btn>
-                <v-btn class="mt-8" text color="#0068c0">
+                <v-btn class="mt-8" text color="#0068c0" @click="homepage">
                     -> zurück zur Bezahlung
                 </v-btn>
             </v-col>
@@ -36,7 +36,19 @@
 <script>
     export default {
         name: 'HomePage',
+        data: () => ({
 
-        data: () => ({}),
+        }),
+        methods: {
+            homepage() {
+                this.$router.push('/home')
+            },
+            checkoutpage() {
+                this.$router.push('/page6')
+            },
+            discountpage() {
+                this.$router.push('/page4')
+            },
+        }
     }
 </script>

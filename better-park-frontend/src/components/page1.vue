@@ -8,11 +8,11 @@
                 </p>
             </v-col>
             <v-col sm="12" md="4" offset-md="4">
-                <v-text-field class="input-field" placeholder="z. B. SNXY9999"  outlined height="70"></v-text-field>
-                <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px">
+                <v-text-field class="input-field" id="licensePlate" v-model="licensePlate" placeholder="z. B. SNXY9999"  outlined height="70"></v-text-field>
+                <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px" @click="fetchLicence">
                     Eingabe bestätigen
                 </v-btn>
-                <v-btn class="mt-6" text color="#0068c0">
+                <v-btn class="mt-6" text color="#0068c0" @click="homepage">
                     -> zurück zur Startseite
                 </v-btn>
             </v-col>
@@ -24,13 +24,41 @@
 </template>
 <script>
     import Footer from './footer.vue'
+    import { mapActions } from 'vuex'
+
     export default {
         name: 'HomePage',
          components: {
             Footer
          },
-        data: () => ({
+         data () {
+            return {
+                licensePlate : '',
+            }
+        },
+        methods: {
+            ...mapActions([
+                'fetchLicensePlate',
+            ]),
+            homepage() {
+                this.$router.push('/home')
+            },
+            fetchLicence() {
+                let body = {
+                    licensePlate: this.licensePlate,
+                }
 
-        }),
+                this.fetchLicensePlate(body).then(response => {
+                    console.log(response)
+                    if(response.parkingProcesses[0].parkingFee == '0')
+                    {
+                        this.$router.push('/page2');
+                    }
+                    else {
+                        this.$router.push('/page3');
+                    }
+                })
+            }
+        }
     }
 </script>

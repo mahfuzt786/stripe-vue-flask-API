@@ -25,7 +25,7 @@
                 <v-btn class="mt-2" depressed color="#0068c0" block large outlined>
                     Gutscheincode einlösen
                 </v-btn>
-                <v-btn class="mt-8" text color="#0068c0">
+                <v-btn class="mt-8" text color="#0068c0" @click="homepage">
                     -> zurück zur Bezahlung
                 </v-btn>
             </v-col>
@@ -37,6 +37,11 @@
         name: 'HomePage',
 
         data: () => ({}),
+        methods: {
+            homepage() {
+                this.$router.push('/home')
+            }
+        }
     }
 </script>
 
