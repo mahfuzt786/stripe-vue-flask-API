@@ -8,7 +8,10 @@
                 </p>
             </v-col>
             <v-col sm="12" md="4" offset-md="4">
-                <v-text-field class="input-field" id="licensePlate" v-model="licensePlate" placeholder="z. B. SNXY9999"  outlined height="70"></v-text-field>
+                <v-text-field class="input-field" id="licensePlate" 
+                    v-model="licensePlate" placeholder="z. B. SNXY9999" 
+                    outlined height="70"
+                ></v-text-field>
                 <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px" @click="fetchLicence">
                     Eingabe bestätigen
                 </v-btn>
@@ -24,17 +27,23 @@
 </template>
 <script>
     import Footer from './footer.vue'
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
 
     export default {
         name: 'HomePage',
-         components: {
+        components: {
             Footer
          },
-         data () {
+        data () {
             return {
                 licensePlate : '',
             }
+        },
+        computed: {
+            ...mapGetters([
+                'getlicensePlate',
+                'getParkingFee',
+            ]),
         },
         methods: {
             ...mapActions([
@@ -48,9 +57,11 @@
                     licensePlate: this.licensePlate,
                 }
 
+                // console.log(this.getlicensePlate)
+                // console.log(this.getParkingFee)
                 this.fetchLicensePlate(body).then(response => {
                     console.log(response)
-                    if(response.parkingProcesses[0].parkingFee == '0')
+                    if(this.getParkingFee == '0')
                     {
                         this.$router.push('/page2');
                     }

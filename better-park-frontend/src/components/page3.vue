@@ -6,7 +6,7 @@
                 <v-card class="mx-auto px-4 py-4" outlined>
                     <div class="mb-4 details" style="font-size:18px !important">Parkhaus, Bahnhofstr. 21, 73479 Ellwangen</div>
                     <div class="my-4 details" style="font-size:18px !important">Kennzeichen <span
-                            class="font-weight-bold px-2">SBB6666</span></div>
+                            class="font-weight-bold px-2">{{ $store.state.licensePlate }} </span></div>
                     <div class="my-4 details" style="font-size:18px !important">Einfahrt <span
                             class="font-weight-bold px-2">16.08.2022, 18:31 Uhr</span></div>
                     <div class="mt-4 details" style="font-size:18px !important">Parkdauer <span class="font-weight-bold px-2">1
@@ -14,7 +14,7 @@
                 </v-card>
                 <v-card class="mx-auto px-4 py-2 my-2 text-center" outlined>
                     <div>
-                        <span class="text-xl-h4 font-weight-bold price">2,45 €</span>
+                        <span class="text-xl-h4 font-weight-bold price">{{ $store.state.parkingFee }} €</span>
                     </div>
                     <div><span>Inkl. 19 % USt</span></div>
                 </v-card>
@@ -34,11 +34,19 @@
     </v-container>
 </template>
 <script>
-    export default {
-        name: 'HomePage',
-        data: () => ({
+    // import { mapGetters } from 'vuex'
 
+    export default {
+        name: 'ConfirmPage',
+        data: () => ({
+            licPl: ''
         }),
+        computed: {
+            // ...mapGetters([
+            //     'getlicensePlate',
+            //     'getParkingFee',
+            // ]),
+        },
         methods: {
             homepage() {
                 this.$router.push('/home')

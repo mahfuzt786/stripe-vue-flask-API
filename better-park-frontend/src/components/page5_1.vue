@@ -5,23 +5,23 @@
                 <h1 class="my-2 primary--text text-center">Bezahlung Parkvorgang</h1>
                 <v-card class="mx-auto px-4 py-4" outlined>
                     <div class="mb-4 details">Parkhaus, Bahnhofstr. 21, 73479 Ellwangen</div>
-                    <div class="my-4 details">Kennzeichen <span class="font-weight-bold px-2">SBB6666</span></div>
+                    <div class="my-4 details">Kennzeichen <span class="font-weight-bold px-2">{{ $store.state.licensePlate }}</span></div>
                     <div class="my-4 details">Einfahrt <span class="font-weight-bold px-2">16.08.2022, 18:31 Uhr</span></div>
                     <div class="mt-4 details">Parkdauer <span class="font-weight-bold px-2">1 Std 45 Min</span></div>
                 </v-card>
                 <v-card class="mx-auto px-4 py-2 my-2 text-center" outlined>
                     <div>
-                        <span class="text-xl-h4 font-weight-bold price">2,45 €</span>
+                        <span class="text-xl-h4 font-weight-bold price">{{ $store.state.parkingFee }} €</span>
                     </div>
                     <div><span>Inkl. 19 % USt</span></div>
                 </v-card>
                 <p class="pt-3 pb-0 mb-3 red--text">Gutscheincode gültig</p>
             </v-col>
             <v-col sm="12" md="4" offset-md="4" class="text-center">
-                <v-btn class="white--text" depressed color="#0068c0" block large style="margin-top:-20px">
+                <v-btn class="white--text" depressed color="#0068c0" block large style="margin-top:-20px" @click="checkoutpage">
                     Jetzt bezahlen
                 </v-btn>
-                <v-btn class="mt-2" depressed color="#0068c0" block large outlined>
+                <v-btn class="mt-2" depressed color="#0068c0" block large outlined @click="discountpage">
                     Gutscheincode einlösen
                 </v-btn>
                 <v-btn class="mt-8" text color="#0068c0" @click="homepage">
@@ -39,7 +39,13 @@
         methods: {
             homepage() {
                 this.$router.push('/home')
-            }
+            },
+            checkoutpage() {
+                this.$router.push('/page6')
+            },
+            discountpage() {
+                this.$router.push('/page4')
+            },
         }
     }
 </script>

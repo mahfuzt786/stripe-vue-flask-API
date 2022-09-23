@@ -2,20 +2,22 @@
     <v-container>
         <v-row  style="margin-top:10px">
             <v-col cols="12" class="text-center mb-0 pb-0">
-                <p class="registration-number mb-0 pb-0 details">Parkvorgang: <span class="font-weight-bold"> {{ licencePlateNumber }}</span></p>
-                <h1 class="my-2 primary--text"> {{ amount }} €</h1>
+                <p class="registration-number mb-0 pb-0 details">Parkvorgang: <span class="font-weight-bold"> {{ $store.state.licensePlate }}</span></p>
+                <h1 class="my-2 primary--text"> {{ $store.state.parkingFeeDiscount }} €</h1>
             </v-col>
             <v-col sm="12" md="4" offset-md="4" class="mt-0 pt-0">
                 <v-form
-                id="payment-form" class="sr-payment-form"
+                id="payment-form" class="sr-payment-form form-group"
                 >
+                <!-- <input class="sr-input" type="hidden" name="licencePlateNumber" id="licencePlateNumber" value={{ $store.state.licensePlate }} /> -->
                     <input class="sr-input" type="hidden" name="licencePlateNumber" id="licencePlateNumber" :value=licencePlateNumber />
                     <input class="sr-input" type="hidden" placeholder="Amount" name="card-pay" id="card-pay" autocomplete="off" :value=amount />
+                    <!-- <input class="sr-input" type="hidden" placeholder="Amount" name="card-pay" id="card-pay" autocomplete="off" value={{ $store.state.parkingFee }} /> -->
 
                     <label style=" color:#595959 !important;">E-Mail</label>
                     <v-text-field class="input" name="card-email" id="card-email" value="" outlined></v-text-field>
 
-                    <label style=" color:#595959 !important;">Zahlungsmethode</label>
+                    <!-- <label style=" color:#595959 !important;">Zahlungsmethode</label>
                     <v-chip-group class="mb-2" active-class="deep-purple accent-4 white--text" column >
                         <v-chip  class="ma-1 py-8 px-1" label>
                             <v-img width="75" height="50" :src="require('../assets/1.png')" />
@@ -30,20 +32,37 @@
                             <v-img width="75" height="50" :src="require('../assets/4.png')" />
                         </v-chip>
 
-                    </v-chip-group>
-                    <label style=" color:#595959 !important;">Kartendaten</label>
-                    <v-text-field class="input-field1 input" type="text" name="card-number" id="card-number" outlined placeholder="1111 1111 1111 1111"
-                    style="margin-bottom:-25px !important;">
-                        <template v-slot:append>
+                    </v-chip-group> -->
+                    <label style=" color:#595959 !important;">Kartendaten</label>                    
+                    <v-text-field class="input-field1 input form-control"
+                        name="card-number" id="card-number" 
+                        outlined 
+                        placeholder="1111 1111 1111 1111"
+                        style="margin-bottom:-25px !important;"
+                        
+                        v-cardformat:formatCardNumber
+                    >
+                        
+                        <!-- <template v-slot:append>
                             <v-img  height="24" v-bind:src="require('../assets/card.png')" style="width:150px !important"/>
-                        </template>
+                        </template> -->
                     </v-text-field>
                     <v-row>
                         <v-col cols="6">
-                            <v-text-field class="input" value="" placeholder="MM/JJ" outlined></v-text-field>
+                            <v-text-field class="input" 
+                                name="card-expiry" id="card-expiry" 
+                                placeholder="MM/JJ" outlined
+                                v-cardformat:formatCardExpiry
+                            >
+                            </v-text-field>
                         </v-col>
                         <v-col cols="6">
-                            <v-text-field class="input" name="card-cvc" id="card-cvc" placeholder="CVC" type="text" outlined>
+                            <v-text-field class="input" 
+                                name="card-cvc" id="card-cvc" 
+                                placeholder="CVC" type="text" 
+                                outlined
+                                v-cardformat:formatCardCVC
+                            >
                                 <template v-slot:append>
                                     <v-img width="100%" height="24" :src="require('../assets/cvv.png')" />
                                 </template>
@@ -96,18 +115,31 @@
         },
        data: function () {
             return {
-                amount: 210,
-                licencePlateNumber: 'asd1234',
+                // amount: 210,
+                // licencePlateNumber: 'asd1234',
                 region: ['Deutschland'],
                 stripe: '',
                 btnDisabled: false,
-                errorMessage: ''
+                errorMessage: '',
             }
+        },
+        watch: {
+            
         },
         computed: {
             ...mapGetters([
-                'getPublicKey'
+                'getPublicKey',
+                // 'getlicensePlate',
+                // 'getParkingFee',
             ]),
+            licencePlateNumber() 
+            { 
+                return this.$store.state.licensePlate 
+            },
+            amount() 
+            { 
+                return this.$store.state.parkingFeeDiscount
+            },
         },
         mounted () {
             this.fetchPublicKey()
@@ -116,7 +148,6 @@
                 /* global Stripe */
                 this.stripe = Stripe(this.getPublicKey)
                 // this.elements = this.stripe.elements()
-
             }
             catch(IntegrationError) {
                 this.$notify({ 'text': 'Stripe API issue. Please retry.' })
@@ -141,12 +172,33 @@
                     this.errorMessage = 'Email id is required'
                     this.setShow();
                 }
+                else if(document.getElementById('card-pay').value == '') {
+                    this.errorMessage = 'Amount is invalid'
+                    this.setShow();
+                }
+                else if(document.getElementById('licencePlateNumber').value == '') {
+                    this.errorMessage = 'licence Plate Number is invalid'
+                    this.setShow();
+                }
+                else if(document.getElementById('card-number').value == '') {
+                    this.errorMessage = 'card number is required'
+                    this.setShow();
+                }
+                else if(document.getElementById('card-expiry').value == '') {
+                    this.errorMessage = 'card expiry is required'
+                    this.setShow();
+                }
+                else if(document.getElementById('card-cvc').value == '') {
+                    this.errorMessage = 'card cvc is required'
+                    this.setShow();
+                }
                 else {
                     let body = {
                         card_amount: document.getElementById('card-pay').value,
                         card_email: document.getElementById('card-email').value,
                         card_name: document.getElementById('licencePlateNumber').value,
                         card_number: document.getElementById('card-number').value,
+                        card_expiry: document.getElementById('card-expiry').value,
                         card_cvc: document.getElementById('card-cvc').value
                     }
 

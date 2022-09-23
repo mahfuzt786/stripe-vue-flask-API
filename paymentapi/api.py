@@ -78,7 +78,6 @@ def create_customer_pay():
     customer_id = ''
     pay_method = ''
 
-    print(data)
 
     try:
         if "payment_intent_id" in data:
@@ -102,8 +101,8 @@ def create_customer_pay():
                 type="card",
                 card={
                     "number": data["card_number"],
-                    "exp_month": 9,
-                    "exp_year": 2023,
+                    "exp_month": data["card_expiry"].split("/", 1)[0].strip(),
+                    "exp_year": data["card_expiry"].split("/", 1)[1].strip(),
                     "cvc": data["card_cvc"],
                 },
             )
@@ -113,7 +112,7 @@ def create_customer_pay():
             intent = stripe.PaymentIntent.create(
                         payment_method = payment_method_id,
                         amount =data["card_amount"],
-                        currency = "chf",
+                        currency = "inr",
                         confirmation_method = "manual",
                         capture_method = "automatic",
                         confirm = True,
@@ -126,3 +125,75 @@ def create_customer_pay():
 
     # return jsonify({"msg": "customer created", "data": {"success": True }}), 200
     return generate_response(intent, data["card_name"])
+
+##TO BE DELETED. FOR DEVELOPMENT PURPOSES.
+@payment_api.route("/Payment.fetch", methods=["GET"])
+def fetch():
+    data = {
+            "licensePlate": "abc 6666",
+            "areaInfos": [
+                {
+                    "areaID": "incididunt",
+                    "areaName": "nulla aliqua eu voluptate eu",
+                    "address": "qui proident 23, 73313 aliquip"
+                },
+                {
+                    "areaID": "sunt",
+                    "areaName": "aliqua ipsum sit quis voluptate",
+                    "address": "ex cillum 53, 63705 aliquip"
+                },
+                {
+                    "areaID": "ad",
+                    "areaName": "velit labore ad quis eiusmod",
+                    "address": "et exercitation 53, 13958 amet"
+                }
+            ],
+            "parkingProcesses": [
+                {
+                    "areaID": "incididunt",
+                    "start": "2004-08-15T10:45:45.555Z",
+                    "stop": "1973-06-27T06:52:33.676Z",
+                    "parkingFee": 45
+                },
+                {
+                    "areaID": "sunt",
+                    "start": "2016-01-24T18:44:43.205Z",
+                    "stop": "2014-08-14T13:11:02.743Z",
+                    "parkingFee": 26
+                },
+                {
+                    "areaID": "ad",
+                    "start": "1977-07-30T03:33:39.609Z",
+                    "stop": "1982-01-02T20:46:28.974Z",
+                    "parkingFee": 40
+                }
+            ]
+        }
+
+    return jsonify(data)
+
+##TO BE DELETED. FOR DEVELOPMENT PURPOSES.
+@payment_api.route("/Payment.discount", methods=["GET"])
+def discount():
+    # input = "licensePlate": "abc 6666",
+    # "discountCode": "aaabbb",
+    # "parkingProcess":  {
+    #                 "areaID": "incididunt",
+    #                 "start": "2004-08-15T10:45:45.555Z",
+    #                 "stop": "1973-06-27T06:52:33.676Z",
+    #                 "parkingFee": 45
+    #             }
+
+    data = {
+            "licensePlate": "abc 6666",
+            "parkingProcess": {
+                "areaID": "incididunt",
+                "start": "2004-08-15T10:45:45.555Z",
+                "stop": "1973-06-27T06:52:33.676Z",
+                "parkingFee": 45
+            },
+            "parkingFee": 37,
+            "discountCode": "aaabbb"
+        }
+
+    return jsonify(data)
