@@ -3,7 +3,7 @@
         <v-row  style="margin-top:10px">
             <v-col cols="12" class="text-center mb-0 pb-0">
                 <p class="registration-number mb-0 pb-0 details">Parkvorgang: <span class="font-weight-bold"> {{ $store.state.licensePlate }}</span></p>
-                <h1 class="my-2 primary--text"> {{ $store.state.parkingFeeDiscount }} €</h1>
+                <h1 class="my-2 primary--text"> {{ amount }} €</h1>
             </v-col>
             <v-col sm="12" md="4" offset-md="4" class="mt-0 pt-0">
                 <v-form
@@ -137,8 +137,11 @@
                 return this.$store.state.licensePlate 
             },
             amount() 
-            { 
-                return this.$store.state.parkingFeeDiscount
+            {
+                if(this.$store.state.parkingFeeDiscount == '') 
+                    return this.$store.state.parkingFee
+                else
+                    return this.$store.state.parkingFeeDiscount
             },
         },
         mounted () {

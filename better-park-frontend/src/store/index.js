@@ -30,13 +30,13 @@ export default new Vuex.Store({
   },
   actions: {
     fetchPublicKey ({ commit }) {
-      return ApiService.get('http://localhost:8081/api/betterpark-payment/Payment.fetch_public_key')
+      return ApiService.get(process.env.VUE_APP_API_CALL + 'Payment.fetch_public_key')
       .then(response => {
         commit('setPublicKey', response.data.public_key)
       })
     },
     chargeAmount (_, charge) {
-      return ApiService.post('http://localhost:8081/api/betterpark-payment/Payment.create_customer_pay', charge)
+      return ApiService.post(process.env.VUE_APP_API_CALL + 'Payment.create_customer_pay', charge)
     },
     // fetchLicensePlate (_, plateNumber) {
     fetchLicensePlate ({ commit }, plateNumber) {
@@ -47,13 +47,13 @@ export default new Vuex.Store({
       //   }
       // });
 
-      return ApiService.get('http://localhost:8081/api/betterpark-payment/Payment.fetch', plateNumber).then(response => {
+      return ApiService.get(process.env.VUE_APP_API_CALL + 'Payment.fetch', plateNumber).then(response => {
         commit('setlicensePlate', response.data.licensePlate)
         commit('setParkingFee', response.data.parkingProcesses[0].parkingFee)
       })
     },
     fetchDiscount ({ commit }) {
-      return ApiService.get('http://localhost:8081/api/betterpark-payment/Payment.discount').then(response => {
+      return ApiService.get(process.env.VUE_APP_API_CALL + 'Payment.discount').then(response => {
         commit('setParkingFeeDiscount', response.data.parkingFee)
       })
     },
