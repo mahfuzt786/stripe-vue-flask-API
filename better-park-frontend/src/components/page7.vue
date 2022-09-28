@@ -6,7 +6,7 @@
                 <v-img class="my-6" :src="icon" style="width:10%;" />
             </v-col>
             <v-col cols="4" offset="4" class="">
-                <v-text-field class="input-field" value="z. B. SNXY9999" outlined height="70"></v-text-field>
+                <v-text-field class="input-field" :value=licencePlateNumber readonly outlined height="70"></v-text-field>
                 <v-btn class="mt-4" text color="#0068c0">
                     -> zur Startseite
                 </v-btn>
@@ -29,6 +29,12 @@
             return {
                 icon: icon
             }
+        },
+        computed: {
+            licencePlateNumber() 
+            { 
+                return this.$store.state.licensePlate
+            },
         },
         methods: {
             homepage() {

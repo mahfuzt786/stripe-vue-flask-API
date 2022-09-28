@@ -9,10 +9,8 @@
                 <v-form
                 id="payment-form" class="sr-payment-form form-group"
                 >
-                <!-- <input class="sr-input" type="hidden" name="licencePlateNumber" id="licencePlateNumber" value={{ $store.state.licensePlate }} /> -->
                     <input class="sr-input" type="hidden" name="licencePlateNumber" id="licencePlateNumber" :value=licencePlateNumber />
                     <input class="sr-input" type="hidden" placeholder="Amount" name="card-pay" id="card-pay" autocomplete="off" :value=amount />
-                    <!-- <input class="sr-input" type="hidden" placeholder="Amount" name="card-pay" id="card-pay" autocomplete="off" value={{ $store.state.parkingFee }} /> -->
 
                     <label style=" color:#595959 !important;">E-Mail</label>
                     <v-text-field class="input" name="card-email" id="card-email" value="" outlined></v-text-field>
@@ -115,8 +113,6 @@
         },
        data: function () {
             return {
-                // amount: 210,
-                // licencePlateNumber: 'asd1234',
                 region: ['Deutschland'],
                 stripe: '',
                 btnDisabled: false,
@@ -134,7 +130,7 @@
             ]),
             licencePlateNumber() 
             { 
-                return this.$store.state.licensePlate 
+                return this.$store.state.licensePlate
             },
             amount() 
             {
@@ -149,11 +145,12 @@
 
             try {
                 /* global Stripe */
-                this.stripe = Stripe(this.getPublicKey)
+                // this.stripe = Stripe(this.getPublicKey)
+                this.stripe = Stripe(this.$store.state.publicKey)
                 // this.elements = this.stripe.elements()
             }
             catch(IntegrationError) {
-                this.$notify({ 'text': 'Stripe API issue. Please retry.' })
+                this.$notify({ 'text': 'Stripe API issue. Please reload.' })
             }
         },
         methods: {
@@ -216,14 +213,12 @@
                 if (response.data.error) {
                     this.$notify({ 'text': response.data.error })
                 } else if (response.data.requires_action) {
-                    console.log(response)
+                    // console.log(response)
                     this.stripe.handleCardAction(
                         response.data.payment_intent_client_secret
                     ).then(this.handleStripeJsResult)
                 } else {
                   this.orderComplete(response)
-                    // this.orderComplete()
-                    console.log(response)
                 }
             },
             handleStripeJsResult (result) {
@@ -232,16 +227,24 @@
                 } else {
                     let body = {
                         payment_intent_id: result.paymentIntent.id,
+                        card_name: document.getElementById('licencePlateNumber').value,
                     }
                   this.chargeAmount(body).then(confirmResult => {
-                    console.log(confirmResult)
 
-                    // return confirmResult
-                  }).then(this.handleServerResponse)
+                    this.orderComplete(confirmResult)
+
+                  });//.then(this.handleServerResponse)
                 }
             },
             orderComplete (response) {
-                this.$notify('pay-done'+ response)
+                if(response.data.success == true) {
+                    this.$notify('pay-done for '+ response.data.licence_plate_number)
+                    // this.$router.push('/page7')
+
+                    setTimeout(() => {
+                        this.$router.push('/page7')
+                    }, 4000);
+                }
             }
         }
     }

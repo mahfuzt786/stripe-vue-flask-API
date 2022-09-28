@@ -8,9 +8,11 @@ from flask import Blueprint, jsonify, request, current_app
 import stripe
 import paymentapi.config
 from os import environ
+from flask_cors import CORS
 
 
 payment_api = Blueprint('api', __name__)
+CORS(payment_api)
 stripe.api_key = paymentapi.config.BaseConfig.STRIPE_SECRET_KEY
 
 
@@ -21,6 +23,8 @@ def fetch_public_key():
 
 
 def generate_response(intent, licence_plate_number):
+    print(intent)
+
     if intent.status == "requires_action" and intent.next_action.type == "use_stripe_sdk":
         return jsonify({
             "requires_action": True,
@@ -28,9 +32,16 @@ def generate_response(intent, licence_plate_number):
         }), 200
     if intent.status != "succeeded":
         return jsonify({"error": "invalid_payment" % (intent.status)}), 200
+        
+    if intent.status == "succeeded":
+        return jsonify({
+            "msg": "payment_done", 
+            "success": True, 
+            "licence_plate_number": licence_plate_number
+        }), 200
 
 
-    return jsonify({"msg": "payment_done", "data": {"success": True, "licence_plate_number": licence_plate_number }}), 200
+    return jsonify({"msg": "payment_done", "success": True, "licence_plate_number": licence_plate_number }), 200
 
 
 @payment_api.route("/Payment.get_payment_list", methods=["GET"])
@@ -78,6 +89,7 @@ def create_customer_pay():
     customer_id = ''
     pay_method = ''
 
+    print(data)
 
     try:
         if "payment_intent_id" in data:
@@ -90,7 +102,6 @@ def create_customer_pay():
                 cus_create = stripe.Customer.create(
                                 name = data["card_name"], #licence_plate_number
                                 email = data["card_email"],
-                                # phone = '9401059543'
                             )
                 customer_id = cus_create['id']
                 
@@ -111,7 +122,7 @@ def create_customer_pay():
 
             intent = stripe.PaymentIntent.create(
                         payment_method = payment_method_id,
-                        amount =data["card_amount"],
+                        amount = int(data["card_amount"])*100,
                         currency = "inr",
                         confirmation_method = "manual",
                         capture_method = "automatic",
@@ -120,10 +131,18 @@ def create_customer_pay():
                         customer = customer_id,
                     )
 
+    ## https://stripe.com/docs/error-handling
     except stripe.error.CardError as error:
-        return jsonify({"error": error.user_message}), 200
+        return jsonify({"error": format(error.user_message)}), 200
+    except stripe.error.InvalidRequestError:
+        return jsonify({"error": "An invalid request occurred"}), 200
+    except Exception:
+        return jsonify({"error": "Another problem occurred, maybe unrelated to Stripe."}), 200
+
 
     # return jsonify({"msg": "customer created", "data": {"success": True }}), 200
+
+    print(data['card_name'])
     return generate_response(intent, data["card_name"])
 
 ##TO BE DELETED. FOR DEVELOPMENT PURPOSES.

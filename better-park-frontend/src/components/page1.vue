@@ -57,8 +57,6 @@
                     licensePlate: this.licensePlate,
                 }
 
-                // console.log(this.getlicensePlate)
-                // console.log(this.getParkingFee)
                 this.fetchLicensePlate(body).then(response => {
                     console.log(response)
                     if(this.getParkingFee == '0')

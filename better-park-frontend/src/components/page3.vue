@@ -34,7 +34,7 @@
     </v-container>
 </template>
 <script>
-    // import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
 
     export default {
         name: 'ConfirmPage',
@@ -42,12 +42,19 @@
             licPl: ''
         }),
         computed: {
-            // ...mapGetters([
-            //     'getlicensePlate',
-            //     'getParkingFee',
-            // ]),
+            ...mapGetters([
+                'getlicensePlate',
+                'getParkingFee',
+                'getPublicKey',
+            ]),
+        },
+        mounted () {
+            this.fetchPublicKey()
         },
         methods: {
+            ...mapActions([
+                'fetchPublicKey',
+            ]),
             homepage() {
                 this.$router.push('/home')
             },

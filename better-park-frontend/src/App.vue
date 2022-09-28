@@ -3,7 +3,7 @@
     <v-app-bar app color="#0068c0" dark>
       <div class="d-flex align-center mx-10" >
         <v-img alt="Vuetify Logo" class="shrink" contain :src="require('./assets/BetterPark_Logo.webp')"
-          transition="scale-transition" />
+          transition="scale-transition"  @click="homepage"/>
       </div>
     </v-app-bar>
 
@@ -20,7 +20,14 @@
 
     components: {},
 
-    data: () => ({}),
+    data: () => (
+      {}
+    ),
+    methods: {
+      homepage() {
+          this.$router.push('/home')
+      },
+    }
   };
 </script>
 
