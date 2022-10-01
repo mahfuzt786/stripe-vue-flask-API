@@ -68,4 +68,8 @@ P{
 .input input{
     color:#595959 !important;
 }
+
+.v-input input {
+  max-height: 100% !important;
+}
 </style>
