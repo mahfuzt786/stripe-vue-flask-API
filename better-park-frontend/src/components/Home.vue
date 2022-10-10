@@ -23,6 +23,8 @@
 </template>
 <script>
     import Footer from './footer.vue'
+    import { mapActions } from 'vuex'
+
     export default {
         name: 'HomePage',
          components: {
@@ -31,10 +33,30 @@
         data: () => ({
             licencePlate: '',
         }),
+        // computed: {
+        //     ...mapGetters([
+        //         'getConfirmLicensePlate',
+        //     ]),
+        // },
         methods: {
+            ...mapActions([
+                'confirmLicensePlate',
+            ]),
             nextPage() {
                 if(this.licencePlate) {
-                    this.$router.push('/page1')
+                    // this.$router.push('/page1')
+
+                    let body = {
+                        licensePlate: this.licencePlate,
+                    }
+
+                    this.confirmLicensePlate(body).then(response => {
+                        console.log(response)
+                        // if(response == this.licencePlate)
+                        {
+                            this.$router.push('/page1');
+                        }
+                    })
                 }
                 else {
                     this.$notify({ 

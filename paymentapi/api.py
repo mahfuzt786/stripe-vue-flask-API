@@ -89,7 +89,7 @@ def create_customer_pay():
     customer_id = ''
     pay_method = ''
 
-    print(data)
+    # print(data)
 
     try:
         if "payment_intent_id" in data:
@@ -148,8 +148,12 @@ def create_customer_pay():
 ##TO BE DELETED. FOR DEVELOPMENT PURPOSES.
 @payment_api.route("/Payment.fetch", methods=["GET"])
 def fetch():
+    data_received = request.args
+
+    # print(data_received.get("licensePlate"))
+    
     data = {
-            "licensePlate": "abc 6666",
+            "licensePlate": data_received.get("licensePlate"),
             "areaInfos": [
                 {
                     "areaID": "incididunt",
@@ -194,14 +198,8 @@ def fetch():
 ##TO BE DELETED. FOR DEVELOPMENT PURPOSES.
 @payment_api.route("/Payment.discount", methods=["GET"])
 def discount():
-    # input = "licensePlate": "abc 6666",
-    # "discountCode": "aaabbb",
-    # "parkingProcess":  {
-    #                 "areaID": "incididunt",
-    #                 "start": "2004-08-15T10:45:45.555Z",
-    #                 "stop": "1973-06-27T06:52:33.676Z",
-    #                 "parkingFee": 45
-    #             }
+    # data_received = request.get_json(force=True)
+    
 
     data = {
             "licensePlate": "abc 6666",

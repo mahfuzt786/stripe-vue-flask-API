@@ -11,6 +11,7 @@
                 <v-text-field class="input-field" id="licensePlate" 
                     v-model="licensePlate" placeholder="z. B. SNXY9999" 
                     outlined height="70"
+                    readonly
                 ></v-text-field>
                 <v-btn class="white--text" depressed color="#0068c0" block x-large style="margin-top:-10px" @click="fetchLicence">
                     Eingabe bestätigen
@@ -36,14 +37,18 @@
          },
         data () {
             return {
-                licensePlate : '',
+                licensePlate : this.getConfirmLicensePlate,
             }
         },
         computed: {
             ...mapGetters([
                 'getlicensePlate',
                 'getParkingFee',
+                'getConfirmLicensePlate',
             ]),
+        },
+        mounted() {
+            this.licensePlate = this.getConfirmLicensePlate
         },
         methods: {
             ...mapActions([
