@@ -32,7 +32,9 @@
         components: {
             Footer
          },
-        data: () => ({}),
+        data: () => ({
+            discountCode : '',
+        }),
         computed: {
             ...mapGetters([
                 'getParkingFeeDiscount',
@@ -47,19 +49,29 @@
             },
             fetchDiscounts() {
                 // let body = {
-                //     discountCode: document.getElementById('discountCode').value,
+                    this.discountCode = document.getElementById('discountCode').value
                 // }
 
-                this.fetchDiscount().then(response => {
-                    console.log(response)
-                    if(this.getParkingFeeDiscount)
-                    {
-                        this.$router.push('/page5');
-                    }
-                    else {
-                        this.$router.push('/page5_1');
-                    }
-                })
+                if(this.discountCode) {
+
+                    this.fetchDiscount().then(response => {
+                        console.log(response)
+                        if(this.getParkingFeeDiscount)
+                        {
+                            this.$router.push('/page5');
+                        }
+                        else {
+                            this.$router.push('/page5_1');
+                        }
+                    })
+                }
+                else {
+                    this.$notify({ 
+                        'text': 'Ungültiger Rabattcode',
+                        type: 'error',
+                        duration: 10000,
+                     })
+                }
             }
         }
     }

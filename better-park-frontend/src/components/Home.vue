@@ -60,7 +60,7 @@
                 }
                 else {
                     this.$notify({ 
-                        'text': 'Please enter License Plate Number',
+                        'text': 'Bitte geben Sie Ihr Kennzeichen ein',
                         type: 'error',
                         duration: 10000,
                      })

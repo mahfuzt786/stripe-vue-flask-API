@@ -98,6 +98,14 @@
                <Footer style="margin-top:-55px !important"/>
             </v-col>
         </v-row>
+
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                indeterminate
+                size="64"
+            ></v-progress-circular>
+        </v-overlay>
+
     </v-container>
 </template>
 <script>
@@ -117,6 +125,7 @@
                 stripe: '',
                 btnDisabled: false,
                 errorMessage: '',
+                overlay: false,
             }
         },
         watch: {
@@ -193,6 +202,8 @@
                     this.setShow();
                 }
                 else {
+                    this.overlay = true
+
                     let body = {
                         card_amount: document.getElementById('card-pay').value,
                         card_email: document.getElementById('card-email').value,
@@ -230,6 +241,7 @@
                         card_name: document.getElementById('licencePlateNumber').value,
                     }
                   this.chargeAmount(body).then(confirmResult => {
+                    this.overlay = false
 
                     this.orderComplete(confirmResult)
 
@@ -238,7 +250,7 @@
             },
             orderComplete (response) {
                 if(response.data.success == true) {
-                    this.$notify('pay-done for '+ response.data.licence_plate_number)
+                    this.$notify('bezahlt für '+ response.data.licence_plate_number)
                     // this.$router.push('/page7')
 
                     setTimeout(() => {

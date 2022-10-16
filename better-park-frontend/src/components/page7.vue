@@ -7,7 +7,7 @@
             </v-col>
             <v-col cols="4" offset="4" class="">
                 <v-text-field class="input-field" :value=licencePlateNumber readonly outlined height="70"></v-text-field>
-                <v-btn class="mt-4" text color="#0068c0">
+                <v-btn class="mt-4" text color="#0068c0" @click="homepage">
                     -> zur Startseite
                 </v-btn>
             </v-col>
