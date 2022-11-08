@@ -43,6 +43,9 @@ export default new Vuex.Store({
     chargeAmount (_, charge) {
       return ApiService.post(process.env.VUE_APP_API_CALL + 'Payment.create_customer_pay', charge)
     },
+    createPaymentIntent (_, charge) {
+      return ApiService.post(process.env.VUE_APP_API_CALL + 'Payment.create_payment_intent', charge)
+    },
     confirmLicensePlate ({ commit }, confirmPlateNumber) {
         commit('setConfirmlicensePlate', confirmPlateNumber.licensePlate)
     },

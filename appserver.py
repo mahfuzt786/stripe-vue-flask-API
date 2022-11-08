@@ -11,8 +11,8 @@ if __name__ == '__main__':
     # app.run(host='0.0.0.0',
     #             debug=True,
     #             port=8081,
-    #             ssl_context=('/home/alegra6/ssl/certs/alegralabs_com_c32c2_e8937_1664927999_3e576c3f7d117d5b1a1b378381e6c78f.crt',
-    #                 '/home/alegra6/ssl/keys/c32c2_e8937_3765a379194b429f8d85040e0d17bbcb.key')
+    #             ssl_context=('/home/alegra6/ssl/certs/alegralabs_com_ad91e_f7e3d_1672012799_b5711564dc077e43b4d2bafdb5a145d1.crt',
+    #                 '/home/alegra6/ssl/keys/ad91e_f7e3d_0f001f3f05970f4aa7a3cc80f230cb41.key')
     #         )
 
     

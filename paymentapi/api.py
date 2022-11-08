@@ -25,7 +25,8 @@ def fetch_public_key():
 def generate_response(intent, licence_plate_number):
     print(intent)
 
-    if intent.status == "requires_action" and intent.next_action.type == "use_stripe_sdk":
+    # if intent.status == "requires_action" and intent.next_action.type == "use_stripe_sdk":
+    if intent.status == "requires_payment_method":
         return jsonify({
             "requires_action": True,
             "payment_intent_client_secret": intent.client_secret,
@@ -107,28 +108,33 @@ def create_customer_pay():
                 
             else :
                 customer_id = cus_exist.data[0]['id']
+            
+            # pay_method = stripe.PaymentMethod.create( #https://stripe.com/docs/api/payment_methods/create
+            #     type="card",
+            #     card={
+            #         "number": data["card_number"],
+            #         "exp_month": data["card_expiry"].split("/", 1)[0].strip(),
+            #         "exp_year": data["card_expiry"].split("/", 1)[1].strip(),
+            #         "cvc": data["card_cvc"],
+            #     },
+            # )
 
-            pay_method = stripe.PaymentMethod.create( #https://stripe.com/docs/api/payment_methods/create
-                type="card",
-                card={
-                    "number": data["card_number"],
-                    "exp_month": data["card_expiry"].split("/", 1)[0].strip(),
-                    "exp_year": data["card_expiry"].split("/", 1)[1].strip(),
-                    "cvc": data["card_cvc"],
-                },
-            )
+            # payment_method_id = pay_method.id
 
-            payment_method_id = pay_method.id
+            # intent = stripe.PaymentIntent.create(
+            #             payment_method = payment_method_id,
+            #             amount = int(data["card_amount"])*100,
+            #             currency = "eur",
+            #             confirmation_method = "manual",
+            #             capture_method = "automatic",
+            #             confirm = True,
+            #             receipt_email = data["card_email"],
+            #             customer = customer_id,
+            #         )
 
-            intent = stripe.PaymentIntent.create(
-                        payment_method = payment_method_id,
-                        amount = int(data["card_amount"])*100,
-                        currency = "inr",
-                        confirmation_method = "manual",
-                        capture_method = "automatic",
-                        confirm = True,
-                        receipt_email = data["card_email"],
-                        customer = customer_id,
+            
+            intent = stripe.PaymentIntent.create(amount=1099, currency="eur", payment_method='giropay', payment_method_types=["giropay"]
+                        
                     )
 
     ## https://stripe.com/docs/error-handling
@@ -142,8 +148,29 @@ def create_customer_pay():
 
     # return jsonify({"msg": "customer created", "data": {"success": True }}), 200
 
-    print(data['card_name'])
+    # print(data['card_name'])
     return generate_response(intent, data["card_name"])
+
+
+@payment_api.route('/Payment.create_payment_intent', methods=['POST'])
+def create_payment_intent():
+    try:
+        # data = json.loads(request.data)
+        data = request.get_json(force=True)
+
+        # Create a PaymentIntent with the order amount and currency
+        intent = stripe.PaymentIntent.create(
+            amount=int(data["card_amount"])*100,
+            currency='eur',
+            automatic_payment_methods={
+                'enabled': True,
+            },
+        )
+        return jsonify({
+            'clientSecret': intent['client_secret']
+        })
+    except Exception as e:
+        return jsonify(error=str(e)), 403
 
 ##TO BE DELETED. FOR DEVELOPMENT PURPOSES.
 @payment_api.route("/Payment.fetch", methods=["GET"])
