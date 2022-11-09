@@ -109,33 +109,29 @@ def create_customer_pay():
             else :
                 customer_id = cus_exist.data[0]['id']
             
-            # pay_method = stripe.PaymentMethod.create( #https://stripe.com/docs/api/payment_methods/create
-            #     type="card",
-            #     card={
-            #         "number": data["card_number"],
-            #         "exp_month": data["card_expiry"].split("/", 1)[0].strip(),
-            #         "exp_year": data["card_expiry"].split("/", 1)[1].strip(),
-            #         "cvc": data["card_cvc"],
-            #     },
-            # )
+            pay_method = stripe.PaymentMethod.create( #https://stripe.com/docs/api/payment_methods/create
+                type="card",
+                card={
+                    "number": data["card_number"],
+                    "exp_month": data["card_expiry"].split("/", 1)[0].strip(),
+                    "exp_year": data["card_expiry"].split("/", 1)[1].strip(),
+                    "cvc": data["card_cvc"],
+                },
+            )
 
-            # payment_method_id = pay_method.id
+            payment_method_id = pay_method.id
 
-            # intent = stripe.PaymentIntent.create(
-            #             payment_method = payment_method_id,
-            #             amount = int(data["card_amount"])*100,
-            #             currency = "eur",
-            #             confirmation_method = "manual",
-            #             capture_method = "automatic",
-            #             confirm = True,
-            #             receipt_email = data["card_email"],
-            #             customer = customer_id,
-            #         )
-
-            
-            intent = stripe.PaymentIntent.create(amount=1099, currency="eur", payment_method='giropay', payment_method_types=["giropay"]
-                        
+            intent = stripe.PaymentIntent.create(
+                        payment_method = payment_method_id,
+                        amount = int(data["card_amount"])*100,
+                        currency = "eur",
+                        confirmation_method = "manual",
+                        capture_method = "automatic",
+                        confirm = True,
+                        receipt_email = data["card_email"],
+                        customer = customer_id,
                     )
+
 
     ## https://stripe.com/docs/error-handling
     except stripe.error.CardError as error:
@@ -158,10 +154,24 @@ def create_payment_intent():
         # data = json.loads(request.data)
         data = request.get_json(force=True)
 
+        cus_exist = stripe.Customer.search(
+                        query="name:'"+ data["card_name"]+"'",
+                    )
+
+        if(len(cus_exist.data) == 0) :
+            cus_create = stripe.Customer.create(
+                            name = data["card_name"], #licence_plate_number
+                        )
+            customer_id = cus_create['id']
+            
+        else :
+            customer_id = cus_exist.data[0]['id']
+        
         # Create a PaymentIntent with the order amount and currency
         intent = stripe.PaymentIntent.create(
             amount=int(data["card_amount"])*100,
             currency='eur',
+            customer = customer_id,
             automatic_payment_methods={
                 'enabled': True,
             },

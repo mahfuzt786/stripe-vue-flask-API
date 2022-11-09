@@ -225,18 +225,6 @@
             },
             // Fetches a payment intent and captures the client secret
             async initialize() {
-                // const items = [{ id: "parkingLicense" }];
-
-                // const response = await fetch("/create-payment-intent", {
-                //     method: "POST",
-                //     headers: { "Content-Type": "application/json" },
-                //     body: JSON.stringify({ items }),
-                // });
-                // const { clientSecret } = await response.json();
-
-                // const clientSecret = '';
-                // const body = JSON.stringify(items)
-
                 let body = {
                         card_amount: document.getElementById('card-pay').value,
                         card_name: document.getElementById('licencePlateNumber').value,
@@ -273,8 +261,8 @@
                     elements,
                     confirmParams: {
                     // Make sure to change this to your payment completion page
-                        // return_url: this.$router.push('/page7'),
-                        return_url: 'http://localhost:8080/#/page7'
+                        // return_url: 'http://localhost:8080/#/page7'
+                        return_url: 'https://www.alegralabs.com/syed/park-stripe/better-park-frontend/dist/#/page7'
                     },
                 });
 

@@ -4,8 +4,8 @@ module.exports = defineConfig({
     'vuetify'
   ],
 
-  // publicPath: '/syed/park-stripe/better-park-frontend/dist/', //for server build
-  publicPath: '/', // for localhost
+  publicPath: '/syed/park-stripe/better-park-frontend/dist/', //for server build
+  // publicPath: '/', // for localhost
 
   devServer: {
     // public: 'localhost:8080',
