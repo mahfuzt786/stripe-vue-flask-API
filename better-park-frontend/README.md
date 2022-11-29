@@ -1,4 +1,4 @@
-# better-park
+# front end for Stripe Payment
 
 ## Project setup
 ```
